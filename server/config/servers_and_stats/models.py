@@ -15,20 +15,6 @@ class Server(models.Model):
 
 class ServerStatus(models.Model):
 
-    # {'host_information': {'sysname': 'win32', 'hostname': '5CD9512815'},
-    # 'network': [
-    #     {'interface': 'Ethernet', 'status': 'down', 'mtu': 1500},
-    #     {'interface': 'VMware Network Adapter VMnet1', 'status': 'up', 'mtu': 1500},
-    #     {'interface': 'VMware Network Adapter VMnet8', 'status': 'up', 'mtu': 1500},
-    #     {'interface': 'Loopback Pseudo-Interface 1', 'status': 'up', 'mtu': 1500},
-    #     {'interface': 'Беспроводная сеть', 'status': 'up', 'mtu': 1500},
-    #     {'interface': 'Подключение по локальной сети* 1', 'status': 'down', 'mtu': 1500},
-    #     {'interface': 'Подключение по локальной сети* 2', 'status': 'down', 'mtu': 1500}],
-    # 'disk': [{'disk': 'C:\\', 'mountpoint': 'C:\\', 'file_system_type': 'NTFS', 'total': 249401421824, 'used': 178183073792}],
-    # 'memory': {'memory_total': 8219471872, 'memory_used': 6440419328, 'memory_percent': 78.4},
-    # 'cpu': {'cpu_cores': 8, 'cpu_physical_cores': 4, 'cpu_freqency': {'current': 1600.0, 'min': 0.0, 'max': 1800.0}},
-    # 'load_average': {'1 min': 0.0, '5 min': 0.0, '15 min': 0.0}}
-
     host = models.CharField('hostname', max_length=255)
     sysname = models.CharField('sysname', max_length=255)
     date = models.DateTimeField('datetime', auto_now_add=True)
@@ -42,7 +28,21 @@ class ServerStatus(models.Model):
     cpu_freqency = models.JSONField(max_length=100)
     load_average = models.JSONField(max_length=100)
 
-
     class Meta:
         managed = True
         verbose_name = 'ServerStatus'
+
+
+class ServerStatus2(models.Model):
+
+    date = models.DateTimeField('datetime', auto_now_add=True)
+    host_information = models.JSONField('host_info', max_length=255)
+    network = models.JSONField('net', max_length=5000)
+    disk = models.JSONField('disk', max_length=5000)
+    memory = models.JSONField('memory', max_length=150)
+    cpu = models.JSONField('cpu', max_length=5000)
+    load_average = models.JSONField('load_avrg', max_length=100)
+
+    class Meta:
+        managed = True
+        verbose_name = 'ServerStatus2'

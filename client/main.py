@@ -39,8 +39,10 @@
 import requests
 import socket
 import logging
+import schedule
 import client_lib as cl
 
+PERIOD = 60    # sec
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
@@ -52,6 +54,7 @@ if __name__ == '__main__':
     url_for_add_srv = f'{base_url}/servers/add'
     url_for_list_srv = f'{base_url}/servers/'
     url_for_add_info = f'{base_url}/servers_status/add'
+    url_for_add_info2 = f'{base_url}/servers_status2/add'
     ext_ip_url = 'https://ifconfig.me/ip'
 
     try:
@@ -73,9 +76,21 @@ if __name__ == '__main__':
         else:
             logging.error(f'Server [hostname: {hostname}, IP-address: {my_ip}, is_active: True] ' +
                           f'is not registered')
-    sys_info = cl.get_system_info()
-    logging.info(sys_info)
-    if cl.post_server_status(url_for_add_info, sys_info, logging):
-        logging.info(f'The next info is successfully added: {sys_info}')
-    else:
-        logging.error(f'Info about server is not added')
+
+    def write_sys_info():
+        sys_info = cl.get_system_info()
+        logging.info(sys_info)
+        # Fisrt way
+        if cl.post_server_status(url_for_add_info, sys_info, logging):
+            logging.info(f'[1] Info about server is added')
+        else:
+            logging.error(f'[1] Info about server is not added')
+        # Second way
+        if cl.post_server_status2(url_for_add_info2, sys_info, logging):
+            logging.info(f'[2] Info about server is added')
+        else:
+            logging.error(f'[2] Info about server is not added')
+
+    schedule.every(PERIOD).seconds.do(write_sys_info)
+    while True:
+        schedule.run_pending()

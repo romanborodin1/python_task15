@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .serializer import ServerSerializer, ServerShortSerializer, ServerStatusSerializer
-from .models import Server, ServerStatus
+from .serializer import ServerSerializer, ServerShortSerializer, ServerStatusSerializer, ServerStatus2Serializer
+from .models import Server, ServerStatus, ServerStatus2
 
 class ServerViewSet(generics.ListAPIView):
 
@@ -48,3 +48,19 @@ class ServerStatusDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = ServerStatus.objects.all()
     serializer_class = ServerStatusSerializer
+
+
+class ServerStatus2ViewSet(generics.ListAPIView):
+
+    queryset = ServerStatus2.objects.all()
+    serializer_class = ServerStatus2Serializer
+
+class ServerStatus2AddView(generics.CreateAPIView):
+
+    queryset = ServerStatus2.objects.all()
+    serializer_class = ServerStatus2Serializer
+
+class ServerStatus2DetailView(generics.RetrieveUpdateDestroyAPIView):
+
+    queryset = ServerStatus2.objects.all()
+    serializer_class = ServerStatus2Serializer

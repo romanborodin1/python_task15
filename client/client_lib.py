@@ -138,7 +138,7 @@ def post_server_status(api_url, sys_info=None, logger=None):
         r = requests.post(api_url, data=payload)
         if r.status_code < 400:
             if logger:
-                logger.info(f'The next info is successfully sent to {api_url}: {payload}')
+                logger.info(f'Function {func_name}. The next info is successfully sent to {api_url}: {payload}')
             return True
         else:
             raise requests.exceptions.ConnectionError(f'Status code: {r.status_code}. Message: {r.text}')
@@ -151,10 +151,36 @@ def post_server_status(api_url, sys_info=None, logger=None):
         raise e
 
 
-if __name__ == '__main__':    # Debug
-    import logging
-    logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s [%(levelname)s] %(message)s',
-                        datefmt='%d-%m-%Y %H:%M:%S')
-    api_url = 'http://127.0.0.1:8000/api/servers/'
-    print(is_server_already_registered(api_url, 'TEST', '127.0.0.1', logging))
+def post_server_status2(api_url, sys_info=None, logger=None):
+    '''
+    :param api_url: Full URL to API for the request. Ex.: http://127.0.0.1:8000/api/servers_status2/add
+    :param sys_info: System information - result of call get_system_info()
+    :param logger: Logging object (module logging)
+    :return: True/False
+    '''
+    func_name = 'post_server_status2()'
+    if not sys_info:
+        sys_info = get_system_info()
+
+    payload = {'date': datetime.now(),
+               'host_information': json.dumps(sys_info['host_information']),
+               'network': json.dumps(sys_info['network']),
+               'disk': json.dumps(sys_info['disk']),
+               'memory': json.dumps(sys_info['memory']),
+               'cpu': json.dumps(sys_info['cpu']),
+               'load_average': json.dumps(sys_info['load_average'])}
+    try:
+        r = requests.post(api_url, data=payload)
+        if r.status_code < 400:
+            if logger:
+                logger.info(f'Function {func_name}. The next info is successfully sent to {api_url}: {payload}')
+            return True
+        else:
+            raise requests.exceptions.ConnectionError(f'Status code: {r.status_code}. Message: {r.text}')
+    except requests.exceptions.ConnectionError as e:
+        msg = f'Function {func_name}. Cannot connect to {api_url}'
+        if logger:
+            logger.error(msg)
+        else:
+            print(msg)
+        raise e

@@ -2,7 +2,8 @@
 
 from django.urls import path
 from .views import ServerViewSet, ServerDetailView, ServerAddView, ServerShortViewSet, ServerShortDetailView, \
-    ServerShortAddView, ServerStatusViewSet, ServerStatusAddView, ServerStatusDetailView
+    ServerShortAddView, ServerStatusViewSet, ServerStatusAddView, ServerStatusDetailView, \
+    ServerStatus2ViewSet, ServerStatus2DetailView, ServerStatus2AddView
 
 
 urlpatterns = [
@@ -16,4 +17,7 @@ urlpatterns = [
     path('servers_status/', ServerStatusViewSet.as_view()),
     path('servers_status/<int:pk>', ServerStatusDetailView.as_view()),
     path('servers_status/add', ServerStatusAddView.as_view()),
+    path('servers_status2/', ServerStatus2ViewSet.as_view()),
+    path('servers_status2/<int:pk>', ServerStatus2DetailView.as_view()),
+    path('servers_status2/add', ServerStatus2AddView.as_view()),
 ]
