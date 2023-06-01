@@ -22,13 +22,14 @@ def is_server_already_registered(api_url, hostname, ip, logger=None):
         for i in r.json():
             if i['ip_address'] == ip and i['name'] == hostname:
                 return True
-    except requests.exceptions.ConnectionError as e:
+        return False
+    except requests.exceptions.ConnectionError:
         msg = f'Function {func_name}. Cannot connect to {api_url}'
         if logger:
             logger.error(msg)
         else:
             print(msg)
-        raise e
+        return False
 
 
 def register_a_server(api_url, hostname, ip, server_is_active=False, description='', logger=None):
@@ -51,14 +52,14 @@ def register_a_server(api_url, hostname, ip, server_is_active=False, description
         if r.status_code < 400:
             return True
         else:
-            raise requests.exceptions.ConnectionError(f'Status code: {r.status_code}. Message: {r.text}')
+            return False
     except requests.exceptions.ConnectionError as e:
         msg = f'Function {func_name}. Cannot connect to {api_url}'
         if logger:
             logger.error(msg)
         else:
             print(msg)
-        raise e
+        return False
 
 
 def get_hostname(logger=None):
@@ -141,14 +142,14 @@ def post_server_status(api_url, sys_info=None, logger=None):
                 logger.info(f'Function {func_name}. The next info is successfully sent to {api_url}: {payload}')
             return True
         else:
-            raise requests.exceptions.ConnectionError(f'Status code: {r.status_code}. Message: {r.text}')
-    except requests.exceptions.ConnectionError as e:
+            return False
+    except requests.exceptions.ConnectionError:
         msg = f'Function {func_name}. Cannot connect to {api_url}'
         if logger:
             logger.error(msg)
         else:
             print(msg)
-        raise e
+        return False
 
 
 def post_server_status2(api_url, sys_info=None, logger=None):
@@ -176,11 +177,11 @@ def post_server_status2(api_url, sys_info=None, logger=None):
                 logger.info(f'Function {func_name}. The next info is successfully sent to {api_url}: {payload}')
             return True
         else:
-            raise requests.exceptions.ConnectionError(f'Status code: {r.status_code}. Message: {r.text}')
+            return False
     except requests.exceptions.ConnectionError as e:
         msg = f'Function {func_name}. Cannot connect to {api_url}'
         if logger:
             logger.error(msg)
         else:
             print(msg)
-        raise e
+        return False
